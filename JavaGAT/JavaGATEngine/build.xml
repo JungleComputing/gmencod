@@ -1,0 +1,108 @@
+<project name="GATEngine" default="build" basedir=".">
+	<description>
+      Build file for GAT
+    </description>
+	<!-- Global properties for GAT -->
+	<property name="src" location="src" />
+	<property name="tmp" location="tmp" />
+	<property name="lib" location="lib" />
+	<property name="doc" location="doc" />
+	<property name="log" location="log" />
+	<property name="test" location="test" />
+	<property name="java.debug.value" value="true" />
+	<property name="external" location="external" />
+
+	<path id="external_jars">
+		<fileset dir="${external}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${lib}" />
+		<mkdir dir="${tmp}" />
+		<mkdir dir="${doc}" />
+		<mkdir dir="${doc}/html" />
+		<mkdir dir="${doc}/html/javadoc" />
+		<mkdir dir="${log}" />
+
+		<!-- Start recording build process -->
+		<record name="${log}/build.log" action="start" />
+	</target>
+
+	<target name="compile" depends="init" description="compile the source ">
+		<!-- Compile the java code from ${src} into ${tmp} -->
+		<javac srcdir="${src}" destdir="${tmp}" debug="on" >
+			<classpath refid="external_jars" />
+		</javac>
+	</target>
+
+	<target name="javadoc" depends="compile" description="generate all javadocs">
+		<javadoc destdir="${doc}/html/javadoc" access="public" packagenames="org.gridlab.*" sourcepath="${src}" overview="src/overview.html">
+			<link href="http://java.sun.com/j2se/1.4.2/docs/api/" />
+		</javadoc>
+	</target>
+	
+    <target name="javadoc-user" depends="compile" description="generate javadoc for gat users">
+        <javadoc destdir="doc/html/javadoc" 
+        	access="public" use="true" notree="false" nonavbar="false" 
+        	noindex="false" splitindex="true" version="true" 
+        	nodeprecatedlist="false" nodeprecated="false" 
+			classpath="tmp">
+            <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+        	
+    		<fileset dir="${src}">
+    			<include name="**/*.java" />
+    			<exclude name="**/cpi/*" />
+    			<exclude name="**/engine/*" />
+    			<exclude name="org/gridlab/gat/util/*" />
+    			<exclude name="**/FileInputStreamInterface.java" />
+    			<exclude name="**/FileOutputStreamInterface.java" />
+    		</fileset>
+
+        </javadoc>
+    </target>
+
+   	<target name="dist" depends="build,javadoc" description="build the distribution">
+	</target>
+
+	<target name="engine" depends="compile" description="build the JAR file">
+
+		<!-- Create the distribution directory -->
+		<mkdir dir="${lib}" />
+
+		<!-- Put everything in ${tmp} into the GAT.jar file -->
+		<jar jarfile="${lib}/GAT.jar" basedir="${tmp}" />
+
+		<!-- Sign the GAT.jar file 
+    <signjar jar="${lib}/GAT.jar" alias="xxxxx" storepass="yyyyy" storetype="pkcs12"/>
+    -->
+
+		<!-- Stop recording build process -->
+		<record name="${log}/build.log" action="stop" />
+	</target>
+
+	<target name="compile-tests" depends="init" description="compile the tests">
+		<!-- Compile the java code from ${test} into ${tmp} -->
+		<javac srcdir="${test}" destdir="${tmp}" />
+	</target>
+
+	<target name="build" description="build everything" depends="engine,compile-tests">
+	</target>
+
+	<target name="clean" description="clean up">
+		<delete dir="${tmp}" />
+		<delete dir="${lib}" />
+		<delete dir="${log}" />
+		<delete file="${test}/file/test_input_copy.dat" />
+	</target>
+
+	<target name="distclean" depends="clean" description="clean up, including docs">
+		<delete dir="${doc}" />
+	</target>
+
+</project>

@@ -1,0 +1,4 @@
+- The ability to choose an arbitary name would be very useful in
+  allowing different components to be slotted into a GRMS job without changing
+  the executable (i.e. used as a form of late binding)
+  (from Ian Wang)

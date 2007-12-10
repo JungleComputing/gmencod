@@ -1,0 +1,22 @@
+This directory contains the Joinc implementation. You can find the 
+Java sources in the directory:
+ 
+     ./src/joinc 
+
+To build Joinc you can use ant. Make sure your ant setup is correct 
+(see the web page for more information). 
+
+You can set the location of the JavaGAT by setting the 'javagat-location'
+in the 'build.properties' file. Note that default setting is correct for 
+use on the fs0 machine. 
+
+You can then type
+
+     ant build        to build joinc
+     ant docs         to build the javadoc documentation. 
+     ant clean        to clean the tree
+
+
+Enjoy!
+
+

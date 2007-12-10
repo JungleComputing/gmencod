@@ -1,0 +1,28 @@
+#!/bin/sh
+
+#GAT_LOCATION=/usr/local/VU/practicum/gridcomputing/JavaGAT-1.5.4
+
+GAT_LOCATION=/home/ppp/2005-2006/GMEncoD-ana-stevens/JavaGAT
+
+if [ $1 = "build" ] 
+then  
+	export CLASSPATH=${GAT_LOCATION}/JavaGATEngine/lib/GAT.jar:$CLASSPATH
+else
+
+#export CLASSPATH=/home3/aoprescu/wp-1/Codes/GATEngine/java/lib/GAT.jar:$CLASSPATH
+
+	for i in ${GAT_LOCATION}/JavaGATEngine/lib/*.jar
+#for i in /home3/aoprescu/wp-1/Codes/GATEngine/java/external/*.jar
+	do
+   		export CLASSPATH=$i:$CLASSPATH
+	done
+
+
+	for i in ${GAT_LOCATION}/JavaGATAdaptors/lib/*.jar
+#for i in /home3/aoprescu/wp-1/Codes/Adaptors/java/lib/*.jar
+	do
+   		export CLASSPATH=$i:$CLASSPATH
+	done
+fi
+
+ant $1

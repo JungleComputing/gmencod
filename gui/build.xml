@@ -1,0 +1,73 @@
+ <project name="GUI for GMEncoD" 
+    default="usage" 
+    basedir=".">
+
+    <property file="build.properties"/>
+    <property file="run.properties"/>
+
+    <property name="srcdir"   location="src"/>
+    <property name="builddir" location="build"/>
+    <property name="docdir"   location="docs"/>
+    <property name="cpath"    location="${jsch-jar}"/>
+
+    <property environment="env"/>
+  
+    <target name="usage" 
+        description="Print usage string">
+
+	<echo message="GUI for GMEncoD:"/>
+     	<echo message="  ant build : build the GUI jar files."/>
+     	<echo message="  ant run   : run GUI."/>
+     	<echo message="  ant clean : clean up the tree."/>
+    </target>
+
+
+    <target name="prepare" 
+        description="Prepares the build tree">
+
+        <mkdir dir="${builddir}" />
+    </target>
+
+    <target name="build"
+        depends="prepare" 
+        description="Build the GUI jar files">
+
+        <javac  srcdir="${srcdir}" 
+                destdir="${builddir}" 
+                includes="*.java" 
+                classpath="${cpath}"
+                debug="true" 
+                deprecation="true" 
+        />
+	
+        <delete failonerror="false" file="gui.jar"/>	
+
+        <jar jarfile="gui.jar">
+            <fileset dir="${builddir}" > 
+                <include name="*" />
+            </fileset>
+        </jar>
+
+        <delete failonerror="false" dir="${builddir}" />
+    </target>
+
+    <target name="run" 
+        description="Run GUI">        
+
+        <java   
+            fork="on" 
+            classpath="gui.jar:${cpath}:${env.CLASSPATH}"
+            classname="GUI"
+            error="errors.log">
+        </java>
+
+    </target>
+
+
+    <target name="clean" 
+        description="Clean the tree">
+        <delete failonerror="false" dir="${builddir}" />
+        <delete failonerror="false" file="gui.jar"/>	
+    </target>
+
+</project>

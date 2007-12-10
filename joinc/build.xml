@@ -1,0 +1,84 @@
+<project name="Java Open Infrastructure for Network Computing (JOINC)" 
+    default="usage" 
+    basedir=".">
+
+    <property file="build.properties"/>
+
+    <property name="srcdir"   location="src"/>
+    <property name="builddir" location="build"/>
+    <property name="distdir"  location="jars"/>
+    <property name="docdir"   location="docs"/>
+
+    <property name="cpath"    location="${javagat-location}/GAT.jar"/>
+
+    <target name="usage" 
+        description="Print usage string">
+
+		<echo message="Java Open Infrastructure for Network Computing:"/>
+		<echo message="  ant build : build the joinc jar file."/>
+		<echo message="  ant docs  : build the javadoc documentation."/>
+    	<echo message="  ant clean : clean up the tree."/>
+    </target>
+
+
+    <target name="prepare" 
+        description="Prepares the build tree">
+
+        <mkdir dir="${distdir}"  />
+        <mkdir dir="${builddir}" />
+		<mkdir dir="${docdir}" />
+    	<mkdir dir="${docdir}/html" />
+    	<mkdir dir="${docdir}/html/javadoc" />
+    </target>
+
+    <target name="docs" 
+    	depends="prepare,build" 
+    	description="generate javadoc for users">
+	       
+    	<javadoc destdir="${docdir}/html/javadoc"
+	    	     access="public" use="true" notree="false" nonavbar="false"
+	             noindex="false" splitindex="true" version="true"
+	             nodeprecatedlist="false" nodeprecated="false"
+	             classpath="${distdir}/joinc.jar:${cpath}">
+	        
+    		<link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+	        	
+    		<fileset dir="${srcdir}">
+	            <include name="**/*.java" />
+            </fileset>
+
+		</javadoc>
+   	</target>
+
+
+    <target name="build"
+        depends="prepare" 
+        description="Build the JOINC jar file">
+
+        <delete failonerror="false" file="${distdir}/joinc.jar" />
+
+        <javac  srcdir="${srcdir}/joinc" 
+                destdir="${builddir}" 
+                includes="**" 
+                classpath="${cpath}"
+                debug="true" 
+                deprecation="true" 
+        />
+
+        <jar jarfile="${distdir}/joinc.jar">
+            <fileset dir="${builddir}" > 
+                <include name="**" />
+            </fileset>
+        </jar>
+
+        <delete failonerror="false" dir="${builddir}/joinc" />
+    </target>
+
+    <target name="clean" 
+        description="Clean the tree">
+        <delete failonerror="false" dir="${distdir}" />
+        <delete failonerror="false" dir="${builddir}" />
+        <delete failonerror="false" dir="${docdir}" />
+    </target>
+
+</project>

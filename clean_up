@@ -1,0 +1,3 @@
+#!/bin/sh
+rm gmerr-$1-*.gm
+rm errors.log

@@ -1,0 +1,80 @@
+First things first
+==================
+
+To build the application, modify accordingly the following files:
+joinc/myant
+joinc/build.properties
+./build.properties
+./myant
+
+To run the application, modify accordingly the following files:
+./run.properties
+
+
+Map of GMEncoD
+==============
+
+Joinc
+-----
+
+* Related files
+
+  joinc/src/joinc/Task.java
+  joinc/src/joinc/Master.java
+
+* Comments
+
+Joinc is the low level part of GMEncoD. The user doesn't have anything to do
+with it, he just has to provide GMEncoD with the corresponding jar file.
+
+Application
+-----------
+
+* Related files
+
+  src/Env.java
+  src/GMEncoD.java
+  src/Worker.java
+
+* Dependencies
+
+  bin/avimerge
+  bin/avisplit
+  bin/mencoder
+	lib/libmad
+	lib/libungif
+	lib/libcdda_paranoia
+	lib/libcdda_interface
+  lib/libmaster.so
+  lib/libworker.so
+  joinc/jars/joinc.jar
+
+* Comments
+
+To use GMEncoD, build the application (ant build) and execute it (ant run). The
+run.properties file contains the arguments that will be passed to the
+application: file to encode, maximum number of computing nodes the application
+is allowed to use in parallel and size of the chunks to encode. The current
+environment works properly. Whenever you would like to test the application in
+a different environment, be sure to respect the aformentioned dependencies.
+
+Gui
+---
+
+* Related files
+
+  gui/src/Gui.java
+
+* Dependencies
+
+  gui/jsch/jsch-0.1.20.jar
+
+* Comments
+
+The GUI is a first step toward making GMEncoD user friendly. To use GUI, build 
+the application (ant build) and execute it (ant run). Basically, it
+asks the user for a hostname, username and password then, it sends the raw avi
+file to the remote machine (on which the user has a SSH account), executes
+GMEncoD and gets the encoded file back once the computation is done. The
+current version works but performs poorly because of the unefficiency of the
+java library used to transfer the data back and forth.

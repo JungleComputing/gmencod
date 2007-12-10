@@ -1,0 +1,33 @@
+* = fixed by ian, not in CVS yet.
+@ = fixed by Rob, in CVS
+
+GAT Requests
+============
+
+	*Main Local/GRAM file staging problem
+	*Caching of FTP clients
+	*Smart adaptor choice, dynamic adaptor loading
+	*Escaped characters (e.g. spaces) in URIs
+	*Common tag for reporting the state and name of the resource manager
+
+	Local executable staging (only uses path not GAT files)
+	@Should allow gsiftp, http etc. to be expressed specifically (see fixURI in FileCPI).
+	@Exists, getAbsolutePath in globus file adaptor
+	@Multiple hosts in Grms submission?
+
+
+Errors
+======
+
+	*Empty path error in LocalFileAdaptor
+	*Empty path error in GlobusFileAdaptor
+	@Equals method in URI
+	*Pre/Post mix-up in GrmsBrokerAdaptor, also zero length arguments
+	*third-party copy appends in grid-ftp adaptor
+	*Semantic mismatch between GRMS Stopped and GAT STOPPED
+
+
+Issues
+======
+
+	Adaptor satisfaction of preferences (what happens with unknown prefs)?

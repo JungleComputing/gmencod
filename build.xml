@@ -1,0 +1,89 @@
+<project name="GMEncoD using JOINC" 
+    default="usage" 
+    basedir=".">
+
+    <property file="build.properties"/>
+    <property file="run.properties"/>
+
+    <property name="srcdir"   location="src"/>
+    <property name="builddir" location="build"/>
+    <property name="docdir"   location="docs"/>
+    <property name="jarsdir"   location="jars"/>
+    <property name="cpath"    location="${joinc-jar}"/>	
+
+    <property environment="env"/>
+  
+    <target name="usage" 
+        description="Print usage string">
+
+	<echo message="GMEncoD using JOINC:"/>
+     	<echo message="  ant build : build the GMEncoD jar files."/>
+     	<echo message="  ant run   : run GMEncoD."/>
+     	<echo message="  ant clean : clean up the tree."/>
+    </target>
+
+
+    <target name="prepare" 
+        description="Prepares the build tree">
+
+        <mkdir dir="${builddir}" />
+	<mkdir dir="${jarsdir}" />
+	<echo message="jars dir: ${jarsdir}"/>
+    </target>
+
+    <target name="build"
+        depends="prepare" 
+        description="Build the GMEncoD jar files">
+
+        <javac  srcdir="${srcdir}" 
+                destdir="${builddir}" 
+                includes="*.java" 
+                classpath="${cpath}"
+                debug="true" 
+                deprecation="true" 
+        />
+	
+        <delete failonerror="false" file="${jarsdir}/gmencod-master.jar"/>	
+        <delete failonerror="false" file="${jarsdir}/gmencod-worker.jar"/>	
+
+        <jar jarfile="${jarsdir}/gmencod-master.jar">
+            <fileset dir="${builddir}" > 
+                <include name="*" />
+                <exclude name="Worker.class" />
+            </fileset>
+        </jar>
+
+        <jar jarfile="${jarsdir}/gmencod-worker.jar">
+            <fileset dir="${builddir}" > 
+                <include name="*" />
+		    <exclude name="GMencoD.class" />
+		    <exclude name="Env.class" />
+            </fileset>
+        </jar>
+
+        <delete failonerror="false" dir="${builddir}" />
+    </target>
+
+    <target name="run" 
+        description="Run GMEncoD">        
+
+        <java   
+            fork="on" 
+            classpath="${jarsdir}/gmencod-master.jar:${cpath}:${env.CLASSPATH}"
+            classname="GMEncoD"
+            error="errors.log">
+        <!--    <arg line="${input-file} ${jarsdir}/gmencod-worker.jar ${max-machines} ${chunk-size}"/> -->
+	    <arg line="${input-file} ${worker-jar} ${max-machines} ${chunk-size}"/> 
+	    <jvmarg line=" -Dgmencod.lib=${ld-library-path} -Djava.io.tmpdir=${tmp-dir} -Dgat.adaptor.path=${gat-adaptor-path} -Dgat.verbose=${verbose-gat} -Dgat.debug=${debug-gat} -server"/>
+        </java>
+
+    </target>
+
+
+    <target name="clean" 
+        description="Clean the tree">
+        <delete failonerror="false" dir="${builddir}" />
+        <delete failonerror="false" dir="${jarsdir}"/>	
+    </target>
+
+</project>

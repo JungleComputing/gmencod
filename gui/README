@@ -1,0 +1,32 @@
+
+Gui
+===
+
+To compile the Gui
+------------------
+
+* Windows
+
+javac -classpath .;jsch-0.1.20.jar Gui.java
+
+* Un*x
+
+javac -classpath .:jsch-0.1.20.jar Gui.java
+
+To execute it
+-------------
+
+* Windows
+
+java -classpath .;jsch-0.1.20.jar Gui
+
+* Un*x
+
+javac -classpath .;jsch-0.1.20.jar Gui
+
+* Comments
+
+The execRemoteCommand won't return false if there are problems inside java,
+like Exception in thread "main" java.lang.NoClassDefFoundError: PPPMaster this
+will be considered as a successful remote execution, as the executable itself
+didn't yield any errors.
